@@ -37,7 +37,7 @@ test.only('third test ', async ({ page }) => {
     await submit_btn.click();
 
     console.log(await page.locator('.inventory_item_label a').first().textContent());
-    console.log(await page.locator('.inventory_item_label a').nth(1).inputValue());
+    console.log(await page.locator('.inventory_item_label a').nth(1).textContent());
 
 }
 );
