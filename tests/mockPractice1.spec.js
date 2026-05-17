@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+const { test, expect, request } = require('@playwright/test');
 
 const SIX_EVENTS_RESPONSE = {
     data: [
@@ -21,7 +21,81 @@ const FOUR_EVENTS_RESPONSE = {
     ],
     pagination: { page: 1, totalPages: 1, total: 4, limit: 12 },
 };
+const loginPayload = { email: "abcjj123456@gmail.com", password: "IamKing@1234" };
+let token;
 
-test("Event", async ({ page }) => {
+async function loginAndGotoEvent(page) {
+
+    const apiContext = await request.newContext();
+    const loginresponse = await apiContext.post("https://api.eventhub.rahulshettyacademy.com/api/auth/login",
+        {
+            data: loginPayload
+        }
+    );
+
+    const response = await loginresponse.json();
+    token = response.token;
+    console.log(token);
+}
+
+test("6 Event", async ({ page }) => {
+
+    await loginAndGotoEvent(page);
+
+    await page.addInitScript(value => {
+        window.localStorage.setItem("eventhub_token", value);
+    }, token);
+
+
+    await page.route("**/api/events**", async (route) => {
+        await route.fulfill(
+            {
+                status: 200,
+                contentType: "application/json",
+                body: JSON.stringify(SIX_EVENTS_RESPONSE),
+            }
+        );
+    }
+    );
+
+    await page.goto("https://eventhub.rahulshettyacademy.com/events");
+    await page.waitForLoadState('networkidle');
+
+    const eventCards = page.getByTestId('event-card');
+    await expect(eventCards.first()).toBeVisible();
+    expect(await eventCards.count()).toEqual(6);
+
+    const banner = page.getByText(/Your sandbox holds up to/i);
+    await expect(banner).toBeVisible();
+    await expect(banner).toContainText("9 bookings");
+    await page.pause();
+
+})
+
+test("4 Events", async ({ page }) => {
+
+    await loginAndGotoEvent(page);
+
+    await page.addInitScript(value => {
+        window.localStorage.setItem("eventhub_token", value);
+    }, token
+    );
+
+    await page.route("**/api/events**", async (route) =>
+        await route.fulfill({
+            status: 200,
+            contentType: "application/json",
+            body: JSON.stringify(FOUR_EVENTS_RESPONSE),
+        })
+    );
+    await page.goto("https://eventhub.rahulshettyacademy.com/events");
+    await page.waitForLoadState('networkidle');
+
+    const eventCards = page.getByTestId('event-card');
+    await expect(eventCards.first()).toBeVisible();
+    expect(await eventCards.count()).toEqual(4);
+
+    const banner = page.getByText(/Your sandbox holds up to/);
+    await expect(banner).not.toBeVisible();
 
 })
