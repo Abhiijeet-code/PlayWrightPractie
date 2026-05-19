@@ -1,5 +1,5 @@
 const ExcelJS = require("exceljs");
-const { test, request } = require('@playwright/test');
+const { test, request, expect } = require('@playwright/test');
 const path = require('path');
 
 
@@ -43,6 +43,9 @@ async function readExcel(worksheet, searchText) {
 //writeExcelTest("Kivi", 300, { rowChange: 0, colChange: 2 }, "/Abhi/Test.xlsx");
 
 test("Upload/Download file", async ({ page }) => {
+    const textSearch = "Kivi";
+    const price = '350';
+
     await page.goto("https://rahulshettyacademy.com/upload-download-test/");
 
     const downloadPromise = page.waitForEvent('download');
@@ -52,6 +55,12 @@ test("Upload/Download file", async ({ page }) => {
     const downloadPath = path.join("C:", "Users", "abhid", "Downloads", "download.xlsx");
     await download.saveAs(downloadPath);
 
-    await writeExcelTest("Kivi", 350, { rowChange: 0, colChange: 2 }, downloadPath);
+    await writeExcelTest(textSearch, price, { rowChange: 0, colChange: 2 }, downloadPath);
     await page.locator("#fileinput").setInputFiles(downloadPath);
+
+    const textLocator = page.getByText(textSearch);
+    const rowlocator = page.getByRole("row").filter({ has: textLocator });
+
+    await expect(rowlocator.locator("#cell-4-undefined")).toContainText(price);
+
 })
