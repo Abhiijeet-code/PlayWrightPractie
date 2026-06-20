@@ -32,7 +32,7 @@ test("Client App", async ({ page }) => {
     await page.locator('div li').first().waitFor();
     const bool = await page.locator('h3:has-text("ZARA COAT 3")').isVisible();
 
-    await expect(bool).toBeTruthy();
+    expect(bool).toBeTruthy();
 
     await page.locator("text=Checkout").click();
 

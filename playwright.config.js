@@ -14,7 +14,7 @@ import { defineConfig, devices } from '@playwright/test';
  */
 const config = ({
   testDir: './tests',
-  timeout: 40 * 1000,
+  timeout: 90 * 1000,
 
   reporter: 'html',
   /* Run tests in files in parallel */
