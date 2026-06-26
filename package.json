@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "WebTest": "npx playwright test --grep \"@Web\" --reporter=line --reporter=allure-playwright",
+    "Tests": "npx playwright test --reporter=line --reporter=allure-playwright"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
