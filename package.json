@@ -9,10 +9,11 @@
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "@playwright/test": "^1.58.2",
+    "@playwright/test": "^1.61.1",
     "@types/node": "^25.5.0"
   },
   "dependencies": {
+    "allure-playwright": "^3.10.2",
     "exceljs": "^4.4.0"
   }
 }
