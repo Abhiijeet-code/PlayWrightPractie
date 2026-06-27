@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        allure 'allure'  // Must match name in Jenkins Global Tool Configuration
+        allure 'Allure'  // Must match name in Jenkins Global Tool Configuration
     }
 
     stages {
