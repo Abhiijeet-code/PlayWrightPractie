@@ -1,5 +1,5 @@
 const { test, expect } = require("@playwright/test");
-const { POmanager } = require("../pageObjects/POmanager.js");
+const { POmanager } = require("../../pageObjects/POmanager.js");
 //json -> string -> js object ... we parse it  because it will be easy for js to directly read
 const dataset = JSON.parse(JSON.stringify(require("../utils/placeOrderTextData.json")));
 
