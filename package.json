@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "WebTest": "npx playwright test --grep \"@Web\" --reporter=line --reporter=allure-playwright",
-    "Tests": "npx playwright test --reporter=line --reporter=allure-playwright"
+    "Tests": "npx playwright test --reporter=line --reporter=allure-playwright",
+    "Cucumber": "npx cucumber-js --tags \"@Regression\" --exit --format html:cucumber-report.html"
   },
   "keywords": [],
   "author": "",

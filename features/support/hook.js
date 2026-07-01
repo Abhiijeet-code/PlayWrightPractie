@@ -20,7 +20,7 @@ BeforeStep(function () {
     console.log("Before step");
 })
 
-AfterStep(async function ({ result }) {
+AfterStep({ tags: "@Validation" }, async function ({ result }) {
     console.log("After step" + result.status);
     if (result.status === Status.FAILED) {
         await this.page.screenshot({ path: "screenshot/error.png" });

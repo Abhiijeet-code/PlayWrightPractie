@@ -34,16 +34,34 @@ pipeline {
                 bat 'npx allure generate allure-results --clean -o allure-report'
             }
         }
+
+        stage('Run Cucumber Tests') {
+            steps {
+                // Run @Regression tagged Cucumber tests and generate HTML report
+                bat 'npm run Cucumber'
+            }
+        }
     }
 
     post {
         always {
+            // Publish Allure Report
             allure([
                 includeProperties: false,
                 jdk: '',
                 results: [[path: 'allure-results']],
                 reportBuildPolicy: 'ALWAYS',
                 report: 'allure-report'
+            ])
+
+            // Publish Cucumber HTML Report
+            publishHTML([
+                allowMissing: false,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: '.',
+                reportFiles: 'cucumber-report.html',
+                reportName: 'Cucumber HTML Report'
             ])
         }
     }

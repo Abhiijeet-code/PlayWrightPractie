@@ -1,4 +1,5 @@
 const { Given, When, Then } = require("@cucumber/cucumber");
+const { expect } = require("@playwright/test");
 
 
 Given('a login to Ecommerce application with {string} and {string}', async function (username, password) {
@@ -40,4 +41,22 @@ Then('Verify Order and {string} is present in the orderHistory', async function 
 
     let orderHistoryPage = this.pomanager.orderhistorypage;
     await orderHistoryPage.verifyOrderHistory(ordernum, productName);
+});
+
+Given('a login Ecommerce2 application with {string} and {string}', async function (username, password) {
+    const userName = this.page.locator('#user-name');
+    const Password = this.page.locator('#password');
+    const submit_btn = this.page.locator("[type = 'submit']");
+
+    await this.page.goto("https://www.saucedemo.com/");
+    await userName.fill(username);
+    await Password.fill(password);
+    await submit_btn.click();
+
+});
+
+Then('Verify the error message is displayed', async function () {
+    console.log(await this.page.locator("[class *= 'error-message']").textContent());
+
+    await expect(this.page.locator("[class *= 'error-message']")).toContainText("Username and password");
 });
